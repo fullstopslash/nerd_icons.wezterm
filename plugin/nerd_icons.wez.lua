@@ -668,18 +668,21 @@ function M.get_global_icon_color()
 end
 
 -- Main function: get icon and colors for tab
+-- When called with colon syntax: plugin:icon_and_colors_for_tab(tab, panes)
+--   self_or_tab = plugin (self)
+--   tab_or_panes = tab object
+--   panes_arg = panes table
 function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_arg)
 	local tab = tab_or_panes
+	ensure_loaded()
 	
 	if not tab then
-		ensure_loaded()
 		return FALLBACK_ICON or default_app_glyph, {}
 	end
 	
-	ensure_loaded()
 	local fallback = FALLBACK_ICON or default_app_glyph
 	local icon = fallback
-	local colors = { ring = nil, ringActive = nil, ringInactive = nil, icon = nil, alert = nil }
+	local colors = {}
 	
 	-- Get title from tab-specific sources (get pane info once, reuse for both title and SSH)
 	local title = nil
@@ -699,21 +702,24 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 				end
 			end
 		end
-	end
-	
-	-- Fallback for active tab
-	if (not title or title == "") and tab.is_active then
-		local ok, ap = pcall(function() return tab.active_pane end)
-		if ok and ap then
-			local ok1, t1 = pcall(function() return ap.title end)
-			if ok1 and t1 and t1 ~= "" then
-				title = t1
-			else
-				local ok2, proc_info = pcall(function() return ap:get_foreground_process_info() end)
-				if ok2 and proc_info then
-					local proc_name = proc_info.name or (proc_info.executable and extract_proc_name(proc_info.executable)) or nil
-					if proc_name and proc_name ~= "" then
-						title = proc_name
+		
+		-- For active tabs, try active_pane as a fallback if pane_info didn't work
+		-- This is critical for active tabs to get the correct icon
+		-- Directly access tab.is_active and tab.active_pane (these are safe to access)
+		if (not title or title == "") and tab.is_active then
+			-- Safely access tab.active_pane (it may not always be available)
+			local ap = tab.active_pane
+			if ap then
+				local ok, t1 = pcall(function() return ap.title end)
+				if ok and t1 and t1 ~= "" then
+					title = t1
+				else
+					local proc_ok, proc_info = pcall(function() return ap:get_foreground_process_info() end)
+					if proc_ok and proc_info then
+						local proc_name = proc_info.name or (proc_info.executable and extract_proc_name(proc_info.executable)) or nil
+						if proc_name and proc_name ~= "" then
+							title = proc_name
+						end
 					end
 				end
 			end
@@ -721,14 +727,13 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	end
 	
 	-- SSH host detection: prioritize active pane for active tabs, otherwise use pane_info
+	-- Directly access tab.is_active and tab.active_pane for active tabs
 	local host = nil
 	if tab.is_active then
-		local ok, ap = pcall(function() return tab.active_pane end)
-		if ok and ap then
-			local ok2, detected_host = pcall(detect_ssh_host_from_pane, ap)
-			if ok2 and detected_host and detected_host ~= "" then
-				host = detected_host
-			end
+		-- For active tabs, tab.active_pane is the most reliable source
+		local ap = tab.active_pane
+		if ap then
+			host = detect_ssh_host_from_pane(ap)
 		end
 	end
 	
@@ -802,6 +807,14 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	colors.alert = colors.alert or GLOBAL_ALERT_COLOR
 	
 	return icon, colors
+end
+
+-- Setup function for plugin compatibility
+-- This allows the plugin to be initialized via setup() if needed
+function M.setup(config, options)
+	-- Configuration is loaded lazily on first use via ensure_loaded()
+	-- This function exists for plugin loading pattern compatibility
+	return config
 end
 
 return M
