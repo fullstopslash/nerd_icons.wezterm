@@ -21,6 +21,9 @@ local GLOBAL_ICON_COLOR = nil
 local GLOBAL_ALERT_COLOR = nil
 local APP_COLOR_MAP = nil
 
+-- Setup options (from setup function arguments)
+local SETUP_OPTIONS = nil
+
 -- Pattern conversion cache
 local PATTERN_CACHE = {}
 
@@ -288,6 +291,139 @@ local function parse_app_block(lines, label)
 	return map, title_patterns_map
 end
 
+-- Apply setup options to configuration
+local function apply_setup_options()
+	if not SETUP_OPTIONS then return end
+	
+	-- Apply config options
+	if SETUP_OPTIONS.config then
+		local cfg = SETUP_OPTIONS.config
+		if cfg.fallback_icon then FALLBACK_ICON = cfg.fallback_icon end
+		if cfg.prefer_host_icon ~= nil then PREFER_HOST_ICON = cfg.prefer_host_icon end
+		if cfg.use_title_as_hostname ~= nil then USE_TITLE_AS_HOSTNAME = cfg.use_title_as_hostname end
+		if cfg.ring_color_active or cfg.index_color_active then
+			GLOBAL_RING_ACTIVE = cfg.ring_color_active or cfg.index_color_active
+		end
+		if cfg.ring_color_inactive or cfg.index_color_inactive then
+			GLOBAL_RING_INACTIVE = cfg.ring_color_inactive or cfg.index_color_inactive
+		end
+		if cfg.ring_color or cfg.index_color then
+			local ring_color = cfg.ring_color or cfg.index_color
+			GLOBAL_RING_ACTIVE = GLOBAL_RING_ACTIVE or ring_color
+			GLOBAL_RING_INACTIVE = GLOBAL_RING_INACTIVE or ring_color
+		end
+		if cfg.icon_color then GLOBAL_ICON_COLOR = cfg.icon_color end
+		if cfg.alert_color then GLOBAL_ALERT_COLOR = cfg.alert_color end
+	end
+	
+	-- Apply icons (merge with YAML if override_yaml is false)
+	if SETUP_OPTIONS.icons then
+		for k, v in pairs(SETUP_OPTIONS.icons) do
+			if k and k ~= "" and v and v ~= "" then
+				local key_lc = k:lower()
+				if SETUP_OPTIONS.override_yaml or not ICON_MAP_CACHE[key_lc] then
+					ICON_MAP_CACHE[key_lc] = v
+				end
+			end
+		end
+	end
+	
+	-- Apply sessions
+	if SETUP_OPTIONS.sessions then
+		for k, v in pairs(SETUP_OPTIONS.sessions) do
+			if k and k ~= "" and v and v ~= "" then
+				local key_lc = k:lower()
+				if SETUP_OPTIONS.override_yaml or not ICON_MAP_CACHE[key_lc] then
+					ICON_MAP_CACHE[key_lc] = v
+				end
+				if SETUP_OPTIONS.override_yaml or not SESSIONS_MAP[key_lc] then
+					SESSIONS_MAP[key_lc] = v
+				end
+			end
+		end
+	end
+	
+	-- Apply title_icons
+	if SETUP_OPTIONS.title_icons then
+		for k, v in pairs(SETUP_OPTIONS.title_icons) do
+			if k and k ~= "" and v and v ~= "" then
+				local key_lc = k:lower()
+				if SETUP_OPTIONS.override_yaml or not TITLE_ICONS_MAP[key_lc] then
+					TITLE_ICONS_MAP[key_lc] = v
+				end
+			end
+		end
+	end
+	
+	-- Apply hosts
+	if SETUP_OPTIONS.hosts then
+		for host_key, host_val in pairs(SETUP_OPTIONS.hosts) do
+			if host_key and host_key ~= "" then
+				local host_key_lc = host_key:lower()
+				local icon_val = nil
+				local colors = {}
+				
+				-- Support both simple string and table format
+				if type(host_val) == "string" then
+					icon_val = host_val
+				elseif type(host_val) == "table" then
+					icon_val = host_val.icon
+					if host_val.colors then
+						colors = host_val.colors
+					end
+					-- Support direct color properties
+					if host_val.ring_color or host_val.index_color then
+						colors["ring-color"] = host_val.ring_color or host_val.index_color
+					end
+					if host_val.icon_color then colors["icon-color"] = host_val.icon_color end
+					if host_val.alert_color then colors["alert-color"] = host_val.alert_color end
+				end
+				
+				if icon_val and icon_val ~= "" then
+					if host_key_lc:find("[%*%?%[]") then
+						-- Pattern match
+						if SETUP_OPTIONS.override_yaml or not HOST_ICON_PATTERNS then
+							table.insert(HOST_ICON_PATTERNS, { host_key_lc, icon_val })
+							if next(colors) then
+								table.insert(HOST_COLOR_PATTERNS, { host_key_lc, colors })
+							end
+						end
+					else
+						-- Exact match
+						if SETUP_OPTIONS.override_yaml or not HOST_ICON_EXACT[host_key_lc] then
+							HOST_ICON_EXACT[host_key_lc] = icon_val
+							if next(colors) then
+								HOST_COLOR_EXACT[host_key_lc] = colors
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	
+	-- Apply app colors
+	if SETUP_OPTIONS.app_colors then
+		for app_key, app_colors in pairs(SETUP_OPTIONS.app_colors) do
+			if app_key and app_key ~= "" and app_colors and type(app_colors) == "table" then
+				local key_lc = app_key:lower()
+				if not APP_COLOR_MAP[key_lc] or SETUP_OPTIONS.override_yaml then
+					APP_COLOR_MAP[key_lc] = {}
+					if app_colors.ring_color or app_colors.index_color then
+						APP_COLOR_MAP[key_lc]["ring-color"] = app_colors.ring_color or app_colors.index_color
+					end
+					if app_colors.icon_color then
+						APP_COLOR_MAP[key_lc]["icon-color"] = app_colors.icon_color
+					end
+					if app_colors.alert_color then
+						APP_COLOR_MAP[key_lc]["alert-color"] = app_colors.alert_color
+					end
+				end
+			end
+		end
+	end
+end
+
 -- Load configuration
 local function ensure_loaded()
 	if ICON_MAP_CACHE ~= nil then return end
@@ -301,110 +437,113 @@ local function ensure_loaded()
 	HOST_COLOR_PATTERNS = {}
 	APP_COLOR_MAP = {}
 	
+	-- Load YAML config first
 	local cfg_path = resolve_icon_config_path()
 	local lines = read_lines(cfg_path)
-	if not lines or #lines == 0 then return end
-	
-	parse_config(lines)
-	local icons, icon_title_patterns = parse_app_block(lines, "icons:")
-	local sessions, _ = parse_app_block(lines, "sessions:")
-	local title_icons, _ = parse_app_block(lines, "title_icons:")
-	
-	for k, v in pairs(icons) do
-		if k and k ~= "" and v and v ~= "" then
-			ICON_MAP_CACHE[k] = v
-		end
-	end
-	for k, v in pairs(sessions) do
-		if k and k ~= "" and v and v ~= "" and ICON_MAP_CACHE[k] == nil then
-			ICON_MAP_CACHE[k] = v
-		end
-	end
-	
-	SESSIONS_MAP = sessions
-	for k, v in pairs(title_icons) do
-		if k and k ~= "" and v and v ~= "" then
-			TITLE_ICONS_MAP[k] = v
-		end
-	end
-	
-	for app_key, patterns in pairs(icon_title_patterns) do
-		TITLE_PATTERN_CACHE[app_key] = patterns
-	end
-	
-	-- Parse hosts block
-	local in_hosts = false
-	local indent_level = nil
-	local i = 1
-	while i <= #lines do
-		local raw = lines[i]
-		local stripped = raw:gsub("^%s+", ""):gsub("%s+$", "")
-		if not in_hosts then
-			if stripped:match("^hosts:%s*") then
-				in_hosts = true
-				indent_level = nil
+	if lines and #lines > 0 then
+		parse_config(lines)
+		local icons, icon_title_patterns = parse_app_block(lines, "icons:")
+		local sessions, _ = parse_app_block(lines, "sessions:")
+		local title_icons, _ = parse_app_block(lines, "title_icons:")
+		
+		for k, v in pairs(icons) do
+			if k and k ~= "" and v and v ~= "" then
+				ICON_MAP_CACHE[k] = v
 			end
-			i = i + 1
-		else
-			if stripped ~= "" and not raw:match("^%s*#") then
-				local cur_indent = count_indent(raw)
-				if not indent_level then indent_level = cur_indent end
-				if cur_indent < indent_level then break end
-				if raw:find(":") then
-					local key_part, rest = raw:match("^%s*([^:]+):%s*(.*)$")
-					if key_part then
-						local host_key = sanitize_yaml_value(key_part)
-						local host_key_lc = (host_key or ""):lower()
-						local val = sanitize_yaml_value(rest)
-						if val ~= nil and val ~= "" and not val:match("^[|>{%[]") then
-							if host_key_lc:find("[%*%?%[]") then
-								table.insert(HOST_ICON_PATTERNS, { host_key_lc, val })
+		end
+		for k, v in pairs(sessions) do
+			if k and k ~= "" and v and v ~= "" and ICON_MAP_CACHE[k] == nil then
+				ICON_MAP_CACHE[k] = v
+			end
+		end
+		
+		SESSIONS_MAP = sessions
+		for k, v in pairs(title_icons) do
+			if k and k ~= "" and v and v ~= "" then
+				TITLE_ICONS_MAP[k] = v
+			end
+		end
+		
+		for app_key, patterns in pairs(icon_title_patterns) do
+			TITLE_PATTERN_CACHE[app_key] = patterns
+		end
+		
+		-- Parse hosts block
+		local in_hosts = false
+		local indent_level = nil
+		local i = 1
+		while i <= #lines do
+			local raw = lines[i]
+			local stripped = raw:gsub("^%s+", ""):gsub("%s+$", "")
+			if not in_hosts then
+				if stripped:match("^hosts:%s*") then
+					in_hosts = true
+					indent_level = nil
+				end
+				i = i + 1
+			else
+				if stripped ~= "" and not raw:match("^%s*#") then
+					local cur_indent = count_indent(raw)
+					if not indent_level then indent_level = cur_indent end
+					if cur_indent < indent_level then break end
+					if raw:find(":") then
+						local key_part, rest = raw:match("^%s*([^:]+):%s*(.*)$")
+						if key_part then
+							local host_key = sanitize_yaml_value(key_part)
+							local host_key_lc = (host_key or ""):lower()
+							local val = sanitize_yaml_value(rest)
+							if val ~= nil and val ~= "" and not val:match("^[|>{%[]") then
+								if host_key_lc:find("[%*%?%[]") then
+									table.insert(HOST_ICON_PATTERNS, { host_key_lc, val })
+								else
+									HOST_ICON_EXACT[host_key_lc] = val
+								end
+								i = i + 1
 							else
-								HOST_ICON_EXACT[host_key_lc] = val
-							end
-							i = i + 1
-						else
-							local base = cur_indent
-							local j = i + 1
-							local icon_val = nil
-							local colors = {}
-							while j <= #lines do
-								local lj = lines[j]
-								local strippedj = lj:gsub("^%s+", ""):gsub("%s+$", "")
-								if strippedj ~= "" and not lj:match("^%s*#") then
-									local indj = count_indent(lj)
-									if indj <= base then break end
-									if lj:find(":") then
-										local nk, nv = lj:match("^%s*([^:]+):%s*(.*)$")
-										nk = nk and sanitize_yaml_value(nk):lower() or nil
-										nv = sanitize_yaml_value(nv)
-										if nk == "icon" then
-											icon_val = nv
-										elseif nk == "ring-color" or nk == "index-color" or nk == "icon-color" or nk == "alert-color" then
-											if nk == "index-color" then
-												colors["ring-color"] = nv
-											else
-												colors[nk] = nv
+								local base = cur_indent
+								local j = i + 1
+								local icon_val = nil
+								local colors = {}
+								while j <= #lines do
+									local lj = lines[j]
+									local strippedj = lj:gsub("^%s+", ""):gsub("%s+$", "")
+									if strippedj ~= "" and not lj:match("^%s*#") then
+										local indj = count_indent(lj)
+										if indj <= base then break end
+										if lj:find(":") then
+											local nk, nv = lj:match("^%s*([^:]+):%s*(.*)$")
+											nk = nk and sanitize_yaml_value(nk):lower() or nil
+											nv = sanitize_yaml_value(nv)
+											if nk == "icon" then
+												icon_val = nv
+											elseif nk == "ring-color" or nk == "index-color" or nk == "icon-color" or nk == "alert-color" then
+												if nk == "index-color" then
+													colors["ring-color"] = nv
+												else
+													colors[nk] = nv
+												end
 											end
 										end
 									end
+									j = j + 1
 								end
-								j = j + 1
-							end
-							if icon_val then
-								if host_key_lc:find("[%*%?%[]") then
-									table.insert(HOST_ICON_PATTERNS, { host_key_lc, icon_val })
-									if next(colors) then
-										table.insert(HOST_COLOR_PATTERNS, { host_key_lc, colors })
-									end
-								else
-									HOST_ICON_EXACT[host_key_lc] = icon_val
-									if next(colors) then
-										HOST_COLOR_EXACT[host_key_lc] = colors
+								if icon_val then
+									if host_key_lc:find("[%*%?%[]") then
+										table.insert(HOST_ICON_PATTERNS, { host_key_lc, icon_val })
+										if next(colors) then
+											table.insert(HOST_COLOR_PATTERNS, { host_key_lc, colors })
+										end
+									else
+										HOST_ICON_EXACT[host_key_lc] = icon_val
+										if next(colors) then
+											HOST_COLOR_EXACT[host_key_lc] = colors
+										end
 									end
 								end
+								i = j
 							end
-							i = j
+						else
+							i = i + 1
 						end
 					else
 						i = i + 1
@@ -412,11 +551,13 @@ local function ensure_loaded()
 				else
 					i = i + 1
 				end
-			else
-				i = i + 1
 			end
 		end
 	end
+	
+	-- Apply setup options (merge with or override YAML)
+	-- This runs even if no YAML file exists, allowing pure programmatic configuration
+	apply_setup_options()
 end
 
 -- Extract hostname from title patterns
@@ -751,8 +892,24 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 end
 
 function M.setup(config, options)
-	-- Setup function for compatibility with plugin loading pattern
-	-- Configuration is loaded lazily on first use
+	-- Setup function accepts options to configure icons programmatically
+	-- Options structure:
+	--   options.icons = { app_name = "icon", ... }
+	--   options.sessions = { session_name = "icon", ... }
+	--   options.title_icons = { title = "icon", ... }
+	--   options.hosts = { hostname = "icon" } or { hostname = { icon = "...", colors = {...} } }
+	--   options.app_colors = { app_name = { ring_color = "...", icon_color = "...", alert_color = "..." } }
+	--   options.config = { fallback_icon = "...", prefer_host_icon = true, ... }
+	--   options.override_yaml = false (if true, setup options override YAML; otherwise merge)
+	
+	if options and type(options) == "table" then
+		SETUP_OPTIONS = options
+		-- If override_yaml is true, clear caches to force reload
+		if options.override_yaml then
+			ICON_MAP_CACHE = nil
+		end
+	end
+	
 	return config
 end
 
