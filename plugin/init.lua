@@ -863,9 +863,8 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 		if USE_TITLE_AS_HOSTNAME and pane_info.title then
 			host = extract_host_from_title(pane_info.title)
 			if not host and is_ssh_process(pane_info.foreground_process_name) then
-				local likely_ssh = not pane_info.domain_name or
-					pane_info.domain_name:lower():find("ssh") or
-					pane_info.domain_name:lower():find("mosh")
+				local domain_lc = pane_info.domain_name and cached_lower(pane_info.domain_name) or ""
+				local likely_ssh = not pane_info.domain_name or domain_lc:find("ssh") or domain_lc:find("mosh")
 				if likely_ssh and pane_info.title:match("^[%w%.%-]+$") and pane_info.title ~= "local" then
 					host = pane_info.title
 				end
