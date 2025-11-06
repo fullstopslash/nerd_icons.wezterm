@@ -35,6 +35,12 @@ local TOKENIZE_CACHE_SIZE = 100  -- Limit cache size
 local LOWER_CACHE = {}
 local LOWER_CACHE_SIZE = 200
 
+-- Cache frequently accessed values
+local ICON_MAP_HAS_ITEMS = false
+local TITLE_ICONS_HAS_ITEMS = false
+local APP_COLOR_HAS_ITEMS = false
+local HOST_PATTERNS_HAS_ITEMS = false
+
 -- Utility functions
 local HOME = os.getenv("HOME") or ""
 
@@ -107,29 +113,40 @@ local function pattern_to_lua(pat)
 	return converted
 end
 
--- Extract process name from path
+-- Extract process name from path (inline for performance)
 local function extract_proc_name(path)
 	if not path then return nil end
-	return path:match("([^/]+)$") or path
+	local last_slash = path:match("([^/]+)$")
+	return last_slash or path
 end
 
--- Tokenize title into candidates (with caching)
+-- Fast empty string check
+local function is_empty(s)
+	return not s or s == ""
+end
+
+-- Tokenize title into candidates (with caching, optimized)
 local function tokenize_title(title)
-	if not title or title == "" then return {} end
+	if is_empty(title) then return {} end
 	
-	-- Check cache first
+	-- Check cache first (fast path)
 	local cached = TOKENIZE_CACHE[title]
 	if cached then return cached end
 	
+	-- Pre-allocate with title as first element
 	local candidates = { title }
+	local count = 1
 	for tok in title:gmatch("[A-Za-z0-9._+-]+") do
-		if tok and tok ~= "" then
-			table.insert(candidates, tok)
+		if tok ~= "" then
+			count = count + 1
+			candidates[count] = tok
 		end
 	end
 	
 	-- Cache result (simple LRU: clear if too large)
-	if #TOKENIZE_CACHE >= TOKENIZE_CACHE_SIZE then
+	local cache_size = 0
+	for _ in pairs(TOKENIZE_CACHE) do cache_size = cache_size + 1 end
+	if cache_size >= TOKENIZE_CACHE_SIZE then
 		TOKENIZE_CACHE = {}
 	end
 	TOKENIZE_CACHE[title] = candidates
@@ -137,13 +154,16 @@ local function tokenize_title(title)
 	return candidates
 end
 
--- Cached lowercase conversion
+-- Cached lowercase conversion (optimized)
 local function cached_lower(str)
 	if not str then return nil end
 	local cached = LOWER_CACHE[str]
 	if cached then return cached end
 	cached = str:lower()
-	if #LOWER_CACHE >= LOWER_CACHE_SIZE then
+	-- Use pairs count instead of # for hash tables
+	local cache_size = 0
+	for _ in pairs(LOWER_CACHE) do cache_size = cache_size + 1 end
+	if cache_size >= LOWER_CACHE_SIZE then
 		LOWER_CACHE = {}
 	end
 	LOWER_CACHE[str] = cached
@@ -498,6 +518,12 @@ local function ensure_loaded()
 			end
 		end
 		
+		-- Cache has_items flags for fast checks
+		ICON_MAP_HAS_ITEMS = next(ICON_MAP_CACHE) ~= nil
+		TITLE_ICONS_HAS_ITEMS = next(TITLE_ICONS_MAP) ~= nil
+		APP_COLOR_HAS_ITEMS = next(APP_COLOR_MAP) ~= nil
+		HOST_PATTERNS_HAS_ITEMS = HOST_ICON_PATTERNS and #HOST_ICON_PATTERNS > 0
+		
 		for app_key, patterns in pairs(icon_title_patterns) do
 			TITLE_PATTERN_CACHE[app_key] = patterns
 		end
@@ -592,6 +618,12 @@ local function ensure_loaded()
 	-- Apply setup options (merge with or override YAML)
 	-- This runs even if no YAML file exists, allowing pure programmatic configuration
 	apply_setup_options()
+	
+	-- Update has_items flags after applying setup options
+	ICON_MAP_HAS_ITEMS = next(ICON_MAP_CACHE) ~= nil
+	TITLE_ICONS_HAS_ITEMS = next(TITLE_ICONS_MAP) ~= nil
+	APP_COLOR_HAS_ITEMS = next(APP_COLOR_MAP) ~= nil
+	HOST_PATTERNS_HAS_ITEMS = HOST_ICON_PATTERNS and #HOST_ICON_PATTERNS > 0
 end
 
 -- Extract hostname from title patterns
@@ -687,25 +719,29 @@ local function detect_ssh_host_from_pane(pane)
 	return nil
 end
 
--- Match host icon from configuration
+-- Match host icon from configuration (optimized)
 local function match_host_icon(host)
-	if not host or host == "" then return nil, nil end
+	if is_empty(host) then return nil, nil end
 	local key = cached_lower(host)
 	
-	-- Fast path: exact match
-	if HOST_ICON_EXACT and HOST_ICON_EXACT[key] then
-		return HOST_ICON_EXACT[key], (HOST_COLOR_EXACT and HOST_COLOR_EXACT[key]) or nil
+	-- Fast path: exact match (most common case)
+	local exact_icon = HOST_ICON_EXACT and HOST_ICON_EXACT[key]
+	if exact_icon then
+		return exact_icon, (HOST_COLOR_EXACT and HOST_COLOR_EXACT[key]) or nil
 	end
 	
 	-- Pattern matching (slower, so do after exact match)
-	if HOST_ICON_PATTERNS and #HOST_ICON_PATTERNS > 0 then
-		for _, pair in ipairs(HOST_ICON_PATTERNS) do
+	if HOST_PATTERNS_HAS_ITEMS then
+		local patterns = HOST_ICON_PATTERNS
+		for i = 1, #patterns do
+			local pair = patterns[i]
 			local pat, icon = pair[1], pair[2]
 			local lua_pat = pattern_to_lua(pat)
 			if lua_pat and key:match("^" .. lua_pat .. "$") then
 				local colors = nil
 				if HOST_COLOR_PATTERNS and #HOST_COLOR_PATTERNS > 0 then
-					for _, cp in ipairs(HOST_COLOR_PATTERNS) do
+					for j = 1, #HOST_COLOR_PATTERNS do
+						local cp = HOST_COLOR_PATTERNS[j]
 						local cp_pat = pattern_to_lua(cp[1])
 						if cp_pat and key:match("^" .. cp_pat .. "$") then
 							colors = cp[2]
@@ -721,13 +757,15 @@ local function match_host_icon(host)
 	return nil, nil
 end
 
--- Match title against compiled patterns
+-- Match title against compiled patterns (optimized)
 local function match_title_patterns(title)
-	if not title or title == "" or not TITLE_PATTERN_CACHE or not next(TITLE_PATTERN_CACHE) then
+	if is_empty(title) or not TITLE_PATTERN_CACHE or not next(TITLE_PATTERN_CACHE) then
 		return nil
 	end
 	for app_key, patterns in pairs(TITLE_PATTERN_CACHE) do
-		for _, pattern_pair in ipairs(patterns) do
+		local pattern_count = #patterns
+		for i = 1, pattern_count do
+			local pattern_pair = patterns[i]
 			local pattern, icon = pattern_pair[1], pattern_pair[2]
 			local lua_pat = pattern_to_lua(pattern)
 			if lua_pat and title:match(lua_pat) then
@@ -738,25 +776,23 @@ local function match_title_patterns(title)
 	return nil
 end
 
--- Get icon for title
+-- Get icon for title (highly optimized hot path)
 function M.icon_for_title(title)
 	ensure_loaded()
 	local fallback = FALLBACK_ICON or default_app_glyph
-	if not title or title == "" then return fallback end
+	if is_empty(title) then return fallback end
 	
 	local title_lc = cached_lower(title)
 	
 	-- Check title-specific icons (fast exact match first)
-	if TITLE_ICONS_MAP then
+	if TITLE_ICONS_HAS_ITEMS then
 		local exact = TITLE_ICONS_MAP[title_lc]
 		if exact then return exact end
 		
-		-- Substring match (slower)
-		if next(TITLE_ICONS_MAP) then
-			for k, v in pairs(TITLE_ICONS_MAP) do
-				if title_lc:find(k, 1, true) then
-					return v
-				end
+		-- Substring match (slower, but cached)
+		for k, v in pairs(TITLE_ICONS_MAP) do
+			if title_lc:find(k, 1, true) then
+				return v
 			end
 		end
 	end
@@ -766,10 +802,11 @@ function M.icon_for_title(title)
 	if pattern_match then return pattern_match end
 	
 	-- Check regular icon cache
-	if ICON_MAP_CACHE and next(ICON_MAP_CACHE) then
+	if ICON_MAP_HAS_ITEMS then
 		local candidates = tokenize_title(title)
-		for _, cand in ipairs(candidates) do
-			local v = ICON_MAP_CACHE[cached_lower(cand)]
+		local candidate_count = #candidates
+		for i = 1, candidate_count do
+			local v = ICON_MAP_CACHE[cached_lower(candidates[i])]
 			if v and v ~= "" then return v end
 		end
 		-- Fallback: substring match (slower, so do last)
@@ -814,12 +851,15 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	local pane_info = nil
 	
 	-- For active tabs, prioritize active_pane for most accurate results
+	-- Try direct access first (faster than pcall for common case)
 	if tab.is_active and tab.active_pane then
 		local ap = tab.active_pane
-		local ok, t1 = pcall(function() return ap.title end)
-		if ok and t1 and t1 ~= "" then
+		-- Try direct access first (most common case)
+		local t1 = ap.title
+		if t1 and t1 ~= "" then
 			title = t1
 		else
+			-- Fallback to pcall for process info
 			local proc_ok, proc_info = pcall(function() return ap:get_foreground_process_info() end)
 			if proc_ok and proc_info then
 				local proc_name = proc_info.name
@@ -834,14 +874,16 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	end
 	
 	-- Fallback to tab_title or pane_info if we don't have a title yet
-	if not title or title == "" then
-		if tab.tab_title and tab.tab_title ~= "" then
-			title = tab.tab_title
+	if is_empty(title) then
+		local tab_title = tab.tab_title
+		if tab_title and tab_title ~= "" then
+			title = tab_title
 		else
 			pane_info = get_tab_pane_info(tab)
 			if pane_info then
-				if pane_info.title and pane_info.title ~= "" then
-					title = pane_info.title
+				local pane_title = pane_info.title
+				if pane_title and pane_title ~= "" then
+					title = pane_title
 				elseif pane_info.foreground_process_name then
 					title = extract_proc_name(pane_info.foreground_process_name)
 				end
@@ -880,15 +922,18 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 		end
 	end
 	
-	-- Match host icon if detected
-	if PREFER_HOST_ICON and host and host ~= "" then
+	-- Match host icon if detected (fast path)
+	if PREFER_HOST_ICON and not is_empty(host) then
 		local icn, host_colors = match_host_icon(host)
 		if icn and icn ~= "" then
 			icon = icn
 			if host_colors then
-				if host_colors["ring-color"] then colors.ring = host_colors["ring-color"] end
-				if host_colors["icon-color"] then colors.icon = host_colors["icon-color"] end
-				if host_colors["alert-color"] then colors.alert = host_colors["alert-color"] end
+				local ring_color = host_colors["ring-color"]
+				if ring_color then colors.ring = ring_color end
+				local icon_color = host_colors["icon-color"]
+				if icon_color then colors.icon = icon_color end
+				local alert_color = host_colors["alert-color"]
+				if alert_color then colors.alert = alert_color end
 			end
 			colors.ringActive = colors.ringActive or GLOBAL_RING_ACTIVE
 			colors.ringInactive = colors.ringInactive or GLOBAL_RING_INACTIVE
@@ -899,7 +944,7 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	end
 	
 	-- Resolve icon from title
-	if title and title ~= "" then
+	if not is_empty(title) then
 		local resolved = M.icon_for_title(title)
 		if resolved and resolved ~= "" then
 			icon = resolved
@@ -907,14 +952,18 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	end
 	
 	-- Look up app-specific colors (reuse tokenization from icon lookup)
-	if title and title ~= "" and APP_COLOR_MAP and next(APP_COLOR_MAP) then
+	if not is_empty(title) and APP_COLOR_HAS_ITEMS then
 		local candidates = tokenize_title(title)  -- Cached if already called
-		for _, cand in ipairs(candidates) do
-			local col = APP_COLOR_MAP[cached_lower(cand)]
+		local candidate_count = #candidates
+		for i = 1, candidate_count do
+			local col = APP_COLOR_MAP[cached_lower(candidates[i])]
 			if col then
-				if col["ring-color"] then colors.ring = col["ring-color"] end
-				if col["icon-color"] then colors.icon = col["icon-color"] end
-				if col["alert-color"] then colors.alert = col["alert-color"] end
+				local ring_color = col["ring-color"]
+				if ring_color then colors.ring = ring_color end
+				local icon_color = col["icon-color"]
+				if icon_color then colors.icon = icon_color end
+				local alert_color = col["alert-color"]
+				if alert_color then colors.alert = alert_color end
 				break
 			end
 		end
