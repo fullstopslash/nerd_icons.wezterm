@@ -27,6 +27,14 @@ local SETUP_OPTIONS = nil
 -- Pattern conversion cache
 local PATTERN_CACHE = {}
 
+-- Tokenization cache (avoid re-tokenizing same titles)
+local TOKENIZE_CACHE = {}
+local TOKENIZE_CACHE_SIZE = 100  -- Limit cache size
+
+-- Lowercase cache (avoid repeated :lower() calls)
+local LOWER_CACHE = {}
+local LOWER_CACHE_SIZE = 200
+
 -- Utility functions
 local HOME = os.getenv("HOME") or ""
 
@@ -105,16 +113,41 @@ local function extract_proc_name(path)
 	return path:match("([^/]+)$") or path
 end
 
--- Tokenize title into candidates
+-- Tokenize title into candidates (with caching)
 local function tokenize_title(title)
 	if not title or title == "" then return {} end
+	
+	-- Check cache first
+	local cached = TOKENIZE_CACHE[title]
+	if cached then return cached end
+	
 	local candidates = { title }
 	for tok in title:gmatch("[A-Za-z0-9._+-]+") do
 		if tok and tok ~= "" then
 			table.insert(candidates, tok)
 		end
 	end
+	
+	-- Cache result (simple LRU: clear if too large)
+	if #TOKENIZE_CACHE >= TOKENIZE_CACHE_SIZE then
+		TOKENIZE_CACHE = {}
+	end
+	TOKENIZE_CACHE[title] = candidates
+	
 	return candidates
+end
+
+-- Cached lowercase conversion
+local function cached_lower(str)
+	if not str then return nil end
+	local cached = LOWER_CACHE[str]
+	if cached then return cached end
+	cached = str:lower()
+	if #LOWER_CACHE >= LOWER_CACHE_SIZE then
+		LOWER_CACHE = {}
+	end
+	LOWER_CACHE[str] = cached
+	return cached
 end
 
 -- Get pane info from tab
@@ -317,11 +350,12 @@ local function apply_setup_options()
 	end
 	
 	-- Apply icons (merge with YAML if override_yaml is false)
+	local override = SETUP_OPTIONS.override_yaml
 	if SETUP_OPTIONS.icons then
 		for k, v in pairs(SETUP_OPTIONS.icons) do
 			if k and k ~= "" and v and v ~= "" then
-				local key_lc = k:lower()
-				if SETUP_OPTIONS.override_yaml or not ICON_MAP_CACHE[key_lc] then
+				local key_lc = cached_lower(k)
+				if override or not ICON_MAP_CACHE[key_lc] then
 					ICON_MAP_CACHE[key_lc] = v
 				end
 			end
@@ -332,11 +366,11 @@ local function apply_setup_options()
 	if SETUP_OPTIONS.sessions then
 		for k, v in pairs(SETUP_OPTIONS.sessions) do
 			if k and k ~= "" and v and v ~= "" then
-				local key_lc = k:lower()
-				if SETUP_OPTIONS.override_yaml or not ICON_MAP_CACHE[key_lc] then
+				local key_lc = cached_lower(k)
+				if override or not ICON_MAP_CACHE[key_lc] then
 					ICON_MAP_CACHE[key_lc] = v
 				end
-				if SETUP_OPTIONS.override_yaml or not SESSIONS_MAP[key_lc] then
+				if override or not SESSIONS_MAP[key_lc] then
 					SESSIONS_MAP[key_lc] = v
 				end
 			end
@@ -347,8 +381,8 @@ local function apply_setup_options()
 	if SETUP_OPTIONS.title_icons then
 		for k, v in pairs(SETUP_OPTIONS.title_icons) do
 			if k and k ~= "" and v and v ~= "" then
-				local key_lc = k:lower()
-				if SETUP_OPTIONS.override_yaml or not TITLE_ICONS_MAP[key_lc] then
+				local key_lc = cached_lower(k)
+				if override or not TITLE_ICONS_MAP[key_lc] then
 					TITLE_ICONS_MAP[key_lc] = v
 				end
 			end
@@ -359,7 +393,7 @@ local function apply_setup_options()
 	if SETUP_OPTIONS.hosts then
 		for host_key, host_val in pairs(SETUP_OPTIONS.hosts) do
 			if host_key and host_key ~= "" then
-				local host_key_lc = host_key:lower()
+				local host_key_lc = cached_lower(host_key)
 				local icon_val = nil
 				local colors = {}
 				
@@ -382,7 +416,7 @@ local function apply_setup_options()
 				if icon_val and icon_val ~= "" then
 					if host_key_lc:find("[%*%?%[]") then
 						-- Pattern match
-						if SETUP_OPTIONS.override_yaml or not HOST_ICON_PATTERNS then
+						if override or not HOST_ICON_PATTERNS then
 							table.insert(HOST_ICON_PATTERNS, { host_key_lc, icon_val })
 							if next(colors) then
 								table.insert(HOST_COLOR_PATTERNS, { host_key_lc, colors })
@@ -390,7 +424,7 @@ local function apply_setup_options()
 						end
 					else
 						-- Exact match
-						if SETUP_OPTIONS.override_yaml or not HOST_ICON_EXACT[host_key_lc] then
+						if override or not HOST_ICON_EXACT[host_key_lc] then
 							HOST_ICON_EXACT[host_key_lc] = icon_val
 							if next(colors) then
 								HOST_COLOR_EXACT[host_key_lc] = colors
@@ -406,8 +440,8 @@ local function apply_setup_options()
 	if SETUP_OPTIONS.app_colors then
 		for app_key, app_colors in pairs(SETUP_OPTIONS.app_colors) do
 			if app_key and app_key ~= "" and app_colors and type(app_colors) == "table" then
-				local key_lc = app_key:lower()
-				if not APP_COLOR_MAP[key_lc] or SETUP_OPTIONS.override_yaml then
+				local key_lc = cached_lower(app_key)
+				if not APP_COLOR_MAP[key_lc] or override then
 					APP_COLOR_MAP[key_lc] = {}
 					if app_colors.ring_color or app_colors.index_color then
 						APP_COLOR_MAP[key_lc]["ring-color"] = app_colors.ring_color or app_colors.index_color
@@ -579,7 +613,7 @@ end
 -- Parse domain name to extract host
 local function parse_domain_host(domain)
 	if not domain then return nil end
-	local domain_lc = domain:lower()
+	local domain_lc = cached_lower(domain)
 	if domain_lc:find("ssh") or domain_lc:find("mosh") then
 		local host = domain:gsub("^[Ss][Ss][Hh][Hh]?:?", ""):gsub("^[Mm][Oo][Ss][Hh]:?", ""):gsub("^%w+@", ""):gsub(":%d+$", "")
 		if host ~= "" and host ~= "local" then
@@ -656,19 +690,21 @@ end
 -- Match host icon from configuration
 local function match_host_icon(host)
 	if not host or host == "" then return nil, nil end
-	local key = host:lower()
+	local key = cached_lower(host)
 	
+	-- Fast path: exact match
 	if HOST_ICON_EXACT and HOST_ICON_EXACT[key] then
-		return HOST_ICON_EXACT[key], HOST_COLOR_EXACT and HOST_COLOR_EXACT[key] or nil
+		return HOST_ICON_EXACT[key], (HOST_COLOR_EXACT and HOST_COLOR_EXACT[key]) or nil
 	end
 	
-	if HOST_ICON_PATTERNS then
+	-- Pattern matching (slower, so do after exact match)
+	if HOST_ICON_PATTERNS and #HOST_ICON_PATTERNS > 0 then
 		for _, pair in ipairs(HOST_ICON_PATTERNS) do
 			local pat, icon = pair[1], pair[2]
 			local lua_pat = pattern_to_lua(pat)
 			if lua_pat and key:match("^" .. lua_pat .. "$") then
 				local colors = nil
-				if HOST_COLOR_PATTERNS then
+				if HOST_COLOR_PATTERNS and #HOST_COLOR_PATTERNS > 0 then
 					for _, cp in ipairs(HOST_COLOR_PATTERNS) do
 						local cp_pat = pattern_to_lua(cp[1])
 						if cp_pat and key:match("^" .. cp_pat .. "$") then
@@ -708,16 +744,19 @@ function M.icon_for_title(title)
 	local fallback = FALLBACK_ICON or default_app_glyph
 	if not title or title == "" then return fallback end
 	
-	local title_lc = title:lower()
+	local title_lc = cached_lower(title)
 	
-	-- Check title-specific icons
-	if TITLE_ICONS_MAP and next(TITLE_ICONS_MAP) then
-		if TITLE_ICONS_MAP[title_lc] then
-			return TITLE_ICONS_MAP[title_lc]
-		end
-		for k, v in pairs(TITLE_ICONS_MAP) do
-			if title_lc:find(k, 1, true) then
-				return v
+	-- Check title-specific icons (fast exact match first)
+	if TITLE_ICONS_MAP then
+		local exact = TITLE_ICONS_MAP[title_lc]
+		if exact then return exact end
+		
+		-- Substring match (slower)
+		if next(TITLE_ICONS_MAP) then
+			for k, v in pairs(TITLE_ICONS_MAP) do
+				if title_lc:find(k, 1, true) then
+					return v
+				end
 			end
 		end
 	end
@@ -730,7 +769,7 @@ function M.icon_for_title(title)
 	if ICON_MAP_CACHE and next(ICON_MAP_CACHE) then
 		local candidates = tokenize_title(title)
 		for _, cand in ipairs(candidates) do
-			local v = ICON_MAP_CACHE[cand:lower()]
+			local v = ICON_MAP_CACHE[cached_lower(cand)]
 			if v and v ~= "" then return v end
 		end
 		-- Fallback: substring match (slower, so do last)
@@ -868,11 +907,11 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 		end
 	end
 	
-	-- Look up app-specific colors
+	-- Look up app-specific colors (reuse tokenization from icon lookup)
 	if title and title ~= "" and APP_COLOR_MAP and next(APP_COLOR_MAP) then
-		local candidates = tokenize_title(title)
+		local candidates = tokenize_title(title)  -- Cached if already called
 		for _, cand in ipairs(candidates) do
-			local col = APP_COLOR_MAP[cand:lower()]
+			local col = APP_COLOR_MAP[cached_lower(cand)]
 			if col then
 				if col["ring-color"] then colors.ring = col["ring-color"] end
 				if col["icon-color"] then colors.icon = col["icon-color"] end
