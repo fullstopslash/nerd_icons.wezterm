@@ -542,15 +542,13 @@ end
 
 -- Match title against compiled patterns
 local function match_title_patterns(title)
-	if not title or title == "" then return nil end
-	if TITLE_PATTERN_CACHE then
-		for app_key, patterns in pairs(TITLE_PATTERN_CACHE) do
-			for _, pattern_pair in ipairs(patterns) do
-				local pattern, icon = pattern_pair[1], pattern_pair[2]
-				local lua_pat = pattern_to_lua(pattern)
-				if lua_pat and title:match(lua_pat) then
-					return icon
-				end
+	if not title or title == "" or not TITLE_PATTERN_CACHE then return nil end
+	for app_key, patterns in pairs(TITLE_PATTERN_CACHE) do
+		for _, pattern_pair in ipairs(patterns) do
+			local pattern, icon = pattern_pair[1], pattern_pair[2]
+			local lua_pat = pattern_to_lua(pattern)
+			if lua_pat and title:match(lua_pat) then
+				return icon
 			end
 		end
 	end
@@ -588,6 +586,7 @@ function M.icon_for_title(title)
 			local v = ICON_MAP_CACHE[cand:lower()]
 			if v and v ~= "" then return v end
 		end
+		-- Fallback: substring match (slower, so do last)
 		for k, v in pairs(ICON_MAP_CACHE) do
 			if title_lc:find(k, 1, true) then
 				return v
@@ -614,20 +613,14 @@ end
 function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_arg)
 	local tab = tab_or_panes
 	
+	ensure_loaded()
+	
 	if not tab then
-		ensure_loaded()
 		return FALLBACK_ICON or default_app_glyph, {}
 	end
-	
-	ensure_loaded()
 	local fallback = FALLBACK_ICON or default_app_glyph
 	local icon = fallback
 	local colors = {}
-	
-	-- Debug: log entry for active tabs
-	if tab.is_active then
-		wezterm.log_info("Plugin.icon_and_colors_for_tab: Active tab " .. tostring(tab.tab_index) .. ", has active_pane: " .. tostring(tab.active_pane ~= nil))
-	end
 	
 	-- Get title from tab-specific sources
 	-- For active tabs, prioritize tab.active_pane FIRST for most accurate results
@@ -673,13 +666,10 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	
 	-- SSH host detection: prioritize active pane for active tabs, otherwise use pane_info
 	local host = nil
-	if tab.is_active then
-		local ok, ap = pcall(function() return tab.active_pane end)
-		if ok and ap then
-			local ok2, detected_host = pcall(detect_ssh_host_from_pane, ap)
-			if ok2 and detected_host and detected_host ~= "" then
-				host = detected_host
-			end
+	if tab.is_active and tab.active_pane then
+		local detected_host = detect_ssh_host_from_pane(tab.active_pane)
+		if detected_host and detected_host ~= "" then
+			host = detected_host
 		end
 	end
 	
