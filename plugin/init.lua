@@ -1,60 +1,3 @@
--- nerd_icons.wez.lua
--- WezTerm Plugin: YAML-driven Icon and Color Resolver
---
--- Provides icon and color resolution for WezTerm tabs based on a YAML configuration file.
--- Supports matching icons by application name, hostname, title patterns, and more.
---
--- Installation:
---   1. Place this file in your WezTerm config directory (usually ~/.config/wezterm/)
---   2. Create a config file at ~/.config/nerd-icons/config.yml (see config format below)
---
--- Usage:
---   In your wezterm.lua:
---     local nerd_icons = require('nerd_icons')
---     
---     -- In format-tab-title callback:
---     local icon, colors = nerd_icons.icon_and_colors_for_tab(nerd_icons, tab, panes)
---     
---   Returns:
---     icon: String - Nerd Font icon glyph for the tab
---     colors: Table with the following keys:
---       - ringActive:   Active tab index/ring color
---       - ringInactive: Inactive tab index/ring color  
---       - icon:         Icon color
---       - alert:        Alert color (for tabs with unseen output)
---
--- Config File Format (~/.config/nerd-icons/config.yml):
---   config:
---     ring-color-active: "#875fff"
---     ring-color-inactive: "#ffffff"
---     icon-color: "#007dfc"
---     alert-color: "#ff0000"
---     fallback-icon: "󰆍"
---   
---   apps:
---     nvim: "󰨞"
---     git: "󰊢"
---     bash: "󰆍"
---   
---   hosts:
---     myserver:
---       icon: "󰌢"
---       ring-color: "#00ff00"
---   
---   patterns:
---     "*.py": "󰌜"
---     "*.rs": "󰌢"
---
--- API:
---   icon_and_colors_for_tab(plugin, tab, panes) -> icon, colors
---     - plugin: The plugin module (self)
---     - tab: WezTerm tab object
---     - panes: Table of panes in the tab
---     - Returns: icon (string), colors (table)
---
---   get_global_icon_color() -> string or nil
---     - Returns: Global icon color from config, or nil if not set
-
 local wezterm = require("wezterm")
 
 local M = {}
@@ -668,58 +611,60 @@ function M.get_global_icon_color()
 end
 
 -- Main function: get icon and colors for tab
--- When called with colon syntax: plugin:icon_and_colors_for_tab(tab, panes)
---   self_or_tab = plugin (self)
---   tab_or_panes = tab object
---   panes_arg = panes table
 function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_arg)
 	local tab = tab_or_panes
-	ensure_loaded()
 	
 	if not tab then
+		ensure_loaded()
 		return FALLBACK_ICON or default_app_glyph, {}
 	end
 	
+	ensure_loaded()
 	local fallback = FALLBACK_ICON or default_app_glyph
 	local icon = fallback
 	local colors = {}
 	
-	-- Get title from tab-specific sources (get pane info once, reuse for both title and SSH)
+	-- Debug: log entry for active tabs
+	if tab.is_active then
+		wezterm.log_info("Plugin.icon_and_colors_for_tab: Active tab " .. tostring(tab.tab_index) .. ", has active_pane: " .. tostring(tab.active_pane ~= nil))
+	end
+	
+	-- Get title from tab-specific sources
+	-- For active tabs, prioritize tab.active_pane FIRST for most accurate results
 	local title = nil
 	local pane_info = nil
 	
-	if tab.tab_title and tab.tab_title ~= "" then
-		title = tab.tab_title
-	else
-		pane_info = get_tab_pane_info(tab)
-		if pane_info then
-			if pane_info.title and pane_info.title ~= "" then
-				title = pane_info.title
-			elseif pane_info.foreground_process_name then
-				local proc_name = extract_proc_name(pane_info.foreground_process_name)
+	-- For active tabs, try active_pane FIRST before falling back to pane_info
+	-- This ensures we get the most up-to-date information from the active pane
+	if tab.is_active and tab.active_pane then
+		local ap = tab.active_pane
+		local ok, t1 = pcall(function() return ap.title end)
+		if ok and t1 and t1 ~= "" then
+			title = t1
+		else
+			local proc_ok, proc_info = pcall(function() return ap:get_foreground_process_info() end)
+			if proc_ok and proc_info then
+				local proc_name = proc_info.name or (proc_info.executable and extract_proc_name(proc_info.executable)) or nil
 				if proc_name and proc_name ~= "" then
 					title = proc_name
 				end
 			end
 		end
-		
-		-- For active tabs, try active_pane as a fallback if pane_info didn't work
-		-- This is critical for active tabs to get the correct icon
-		-- Directly access tab.is_active and tab.active_pane (these are safe to access)
-		if (not title or title == "") and tab.is_active then
-			-- Safely access tab.active_pane (it may not always be available)
-			local ap = tab.active_pane
-			if ap then
-				local ok, t1 = pcall(function() return ap.title end)
-				if ok and t1 and t1 ~= "" then
-					title = t1
-				else
-					local proc_ok, proc_info = pcall(function() return ap:get_foreground_process_info() end)
-					if proc_ok and proc_info then
-						local proc_name = proc_info.name or (proc_info.executable and extract_proc_name(proc_info.executable)) or nil
-						if proc_name and proc_name ~= "" then
-							title = proc_name
-						end
+	end
+	
+	-- Fallback to tab_title or pane_info if we don't have a title yet
+	if (not title or title == "") then
+		if tab.tab_title and tab.tab_title ~= "" then
+			title = tab.tab_title
+		else
+			pane_info = get_tab_pane_info(tab)
+			if pane_info then
+				if pane_info.title and pane_info.title ~= "" then
+					title = pane_info.title
+				elseif pane_info.foreground_process_name then
+					local proc_name = extract_proc_name(pane_info.foreground_process_name)
+					if proc_name and proc_name ~= "" then
+						title = proc_name
 					end
 				end
 			end
@@ -727,13 +672,14 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	end
 	
 	-- SSH host detection: prioritize active pane for active tabs, otherwise use pane_info
-	-- Directly access tab.is_active and tab.active_pane for active tabs
 	local host = nil
 	if tab.is_active then
-		-- For active tabs, tab.active_pane is the most reliable source
-		local ap = tab.active_pane
-		if ap then
-			host = detect_ssh_host_from_pane(ap)
+		local ok, ap = pcall(function() return tab.active_pane end)
+		if ok and ap then
+			local ok2, detected_host = pcall(detect_ssh_host_from_pane, ap)
+			if ok2 and detected_host and detected_host ~= "" then
+				host = detected_host
+			end
 		end
 	end
 	
@@ -809,15 +755,10 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	return icon, colors
 end
 
--- Setup function for plugin compatibility
--- This allows the plugin to be initialized via setup() if needed
 function M.setup(config, options)
-	-- Configuration is loaded lazily on first use via ensure_loaded()
-	-- This function exists for plugin loading pattern compatibility
+	-- Setup function for compatibility with plugin loading pattern
+	-- Configuration is loaded lazily on first use
 	return config
 end
 
 return M
-
-
-
