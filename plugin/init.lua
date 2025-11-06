@@ -25,10 +25,12 @@ local APP_COLOR_MAP = nil
 local PATTERN_CACHE = {}
 
 -- Utility functions
+local HOME = os.getenv("HOME") or ""
+
 local function expanduser(path)
 	if not path then return nil end
 	if path:sub(1, 1) == "~" then
-		return (os.getenv("HOME") or "") .. path:sub(2)
+		return HOME .. path:sub(2)
 	end
 	return path
 end
@@ -74,7 +76,7 @@ end
 local function resolve_icon_config_path()
 	local env = os.getenv("KITTY_ICON_CONFIG") or os.getenv("WAYBAR_ICON_CONFIG")
 	if env and file_exists(env) then return expanduser(env) end
-	return (os.getenv("HOME") or "") .. "/.config/nerd-icons/config.yml"
+	return HOME .. "/.config/nerd-icons/config.yml"
 end
 
 local function parse_bool(val)
@@ -112,21 +114,20 @@ local function tokenize_title(title)
 	return candidates
 end
 
--- Get pane info from tab (cached)
+-- Get pane info from tab
 local function get_tab_pane_info(tab)
-	if not tab or not tab.panes then return nil end
-	local ok, tab_panes = pcall(function() return tab.panes end)
-	if not ok or not tab_panes or type(tab_panes) ~= "table" or #tab_panes == 0 then
+	if not tab then return nil end
+	local tab_panes = tab.panes
+	if not tab_panes or type(tab_panes) ~= "table" or #tab_panes == 0 then
 		return nil
 	end
-	local pane_info = nil
-	for i, pi in ipairs(tab_panes) do
+	-- Find active pane first, fallback to first pane
+	for _, pi in ipairs(tab_panes) do
 		if pi.is_active then
-			pane_info = pi
-			break
+			return pi
 		end
 	end
-	return pane_info or tab_panes[1]
+	return tab_panes[1]
 end
 
 -- Parse config block
@@ -421,10 +422,13 @@ end
 -- Extract hostname from title patterns
 local function extract_host_from_title(title)
 	if not title or title == "" then return nil end
+	-- Try @hostname pattern first
 	local host = title:match("@([%w%.%-]+)")
 	if host then return host end
+	-- Try SSH: hostname pattern
 	host = title:match("[Ss][Ss][Hh][Hh]?%s*:?%s*([%w%.%-]+)")
 	if host then return host end
+	-- Check if title itself is a hostname
 	if title:match("^[%w%.%-]+$") and not title:match("^%d+") and title ~= "local" then
 		return title
 	end
@@ -542,7 +546,9 @@ end
 
 -- Match title against compiled patterns
 local function match_title_patterns(title)
-	if not title or title == "" or not TITLE_PATTERN_CACHE then return nil end
+	if not title or title == "" or not TITLE_PATTERN_CACHE or not next(TITLE_PATTERN_CACHE) then
+		return nil
+	end
 	for app_key, patterns in pairs(TITLE_PATTERN_CACHE) do
 		for _, pattern_pair in ipairs(patterns) do
 			local pattern, icon = pattern_pair[1], pattern_pair[2]
@@ -627,8 +633,7 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	local title = nil
 	local pane_info = nil
 	
-	-- For active tabs, try active_pane FIRST before falling back to pane_info
-	-- This ensures we get the most up-to-date information from the active pane
+	-- For active tabs, prioritize active_pane for most accurate results
 	if tab.is_active and tab.active_pane then
 		local ap = tab.active_pane
 		local ok, t1 = pcall(function() return ap.title end)
@@ -637,7 +642,10 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 		else
 			local proc_ok, proc_info = pcall(function() return ap:get_foreground_process_info() end)
 			if proc_ok and proc_info then
-				local proc_name = proc_info.name or (proc_info.executable and extract_proc_name(proc_info.executable)) or nil
+				local proc_name = proc_info.name
+				if not proc_name and proc_info.executable then
+					proc_name = extract_proc_name(proc_info.executable)
+				end
 				if proc_name and proc_name ~= "" then
 					title = proc_name
 				end
@@ -646,7 +654,7 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 	end
 	
 	-- Fallback to tab_title or pane_info if we don't have a title yet
-	if (not title or title == "") then
+	if not title or title == "" then
 		if tab.tab_title and tab.tab_title ~= "" then
 			title = tab.tab_title
 		else
@@ -655,10 +663,7 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 				if pane_info.title and pane_info.title ~= "" then
 					title = pane_info.title
 				elseif pane_info.foreground_process_name then
-					local proc_name = extract_proc_name(pane_info.foreground_process_name)
-					if proc_name and proc_name ~= "" then
-						title = proc_name
-					end
+					title = extract_proc_name(pane_info.foreground_process_name)
 				end
 			end
 		end
@@ -702,9 +707,9 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 		if icn and icn ~= "" then
 			icon = icn
 			if host_colors then
-				colors.ring = host_colors["ring-color"] or colors.ring
-				colors.icon = host_colors["icon-color"] or colors.icon
-				colors.alert = host_colors["alert-color"] or colors.alert
+				if host_colors["ring-color"] then colors.ring = host_colors["ring-color"] end
+				if host_colors["icon-color"] then colors.icon = host_colors["icon-color"] end
+				if host_colors["alert-color"] then colors.alert = host_colors["alert-color"] end
 			end
 			colors.ringActive = colors.ringActive or GLOBAL_RING_ACTIVE
 			colors.ringInactive = colors.ringInactive or GLOBAL_RING_INACTIVE
@@ -722,15 +727,15 @@ function M.icon_and_colors_for_tab(self_or_tab, tab_or_panes, panes_arg, tabs_ar
 		end
 	end
 	
-	-- Look up app-specific colors (reuse tokenization)
+	-- Look up app-specific colors
 	if title and title ~= "" and APP_COLOR_MAP and next(APP_COLOR_MAP) then
 		local candidates = tokenize_title(title)
 		for _, cand in ipairs(candidates) do
 			local col = APP_COLOR_MAP[cand:lower()]
 			if col then
-				colors.ring = col["ring-color"] or colors.ring
-				colors.icon = col["icon-color"] or colors.icon
-				colors.alert = col["alert-color"] or colors.alert
+				if col["ring-color"] then colors.ring = col["ring-color"] end
+				if col["icon-color"] then colors.icon = col["icon-color"] end
+				if col["alert-color"] then colors.alert = col["alert-color"] end
 				break
 			end
 		end
