@@ -1,0 +1,2913 @@
+[
+  {
+    "event": "run_started",
+    "cgg_version": "0.1.0",
+    "argv": [
+      "cgg",
+      ".",
+      "-t",
+      "mermaid",
+      "-o",
+      "docs/cgg/graph.mmd"
+    ]
+  },
+  {
+    "event": "file_discovered",
+    "path": "./AGENTS.md"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./AGENTS.md",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./todo.md"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./todo.md",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./.beads/metadata.json"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.beads/metadata.json",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./.beads/README.md"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.beads/README.md",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./.beads/config.yaml"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.beads/config.yaml",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./.beads/interactions.jsonl"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.beads/interactions.jsonl",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./.beads/.gitignore"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.beads/.gitignore",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./plugin/init.lua"
+  },
+  {
+    "event": "file_discovered",
+    "path": "./.gitattributes"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.gitattributes",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./config.example.yml"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./config.example.yml",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./README.md"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./README.md",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./docs/cgg/.regen.log"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./docs/cgg/.regen.log",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./LICENSE"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./LICENSE",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_discovered",
+    "path": "./.gitignore"
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.gitignore",
+    "reason": {
+      "kind": "unknown-extension"
+    }
+  },
+  {
+    "event": "file_analyzed",
+    "file": 0,
+    "path": "./plugin/init.lua",
+    "language": "lua",
+    "detected_via": "extension:.lua",
+    "blake3": "0d4916d848aaaf536e10368cceb9a0cdf436a04b6c9f88aa50a37df69a165648",
+    "size_bytes": 25723,
+    "lines": 872,
+    "parse_ms": 1.932763,
+    "parse_status": "ok",
+    "callables": [
+      {
+        "id": 0,
+        "qualified_name": "expanduser",
+        "kind": "freefunction",
+        "start_line": 43,
+        "end_line": 49,
+        "start_byte": 1207,
+        "end_byte": 1374
+      },
+      {
+        "id": 1,
+        "qualified_name": "file_exists",
+        "kind": "freefunction",
+        "start_line": 51,
+        "end_line": 56,
+        "start_byte": 1376,
+        "end_byte": 1525
+      },
+      {
+        "id": 2,
+        "qualified_name": "read_lines",
+        "kind": "freefunction",
+        "start_line": 58,
+        "end_line": 66,
+        "start_byte": 1527,
+        "end_byte": 1752
+      },
+      {
+        "id": 3,
+        "qualified_name": "sanitize_yaml_value",
+        "kind": "freefunction",
+        "start_line": 68,
+        "end_line": 82,
+        "start_byte": 1754,
+        "end_byte": 2141
+      },
+      {
+        "id": 4,
+        "qualified_name": "count_indent",
+        "kind": "freefunction",
+        "start_line": 84,
+        "end_line": 87,
+        "start_byte": 2143,
+        "end_byte": 2233
+      },
+      {
+        "id": 5,
+        "qualified_name": "resolve_icon_config_path",
+        "kind": "freefunction",
+        "start_line": 89,
+        "end_line": 93,
+        "start_byte": 2235,
+        "end_byte": 2469
+      },
+      {
+        "id": 6,
+        "qualified_name": "parse_bool",
+        "kind": "freefunction",
+        "start_line": 95,
+        "end_line": 99,
+        "start_byte": 2471,
+        "end_byte": 2628
+      },
+      {
+        "id": 7,
+        "qualified_name": "pattern_to_lua",
+        "kind": "freefunction",
+        "start_line": 102,
+        "end_line": 110,
+        "start_byte": 2694,
+        "end_byte": 2968
+      },
+      {
+        "id": 8,
+        "qualified_name": "extract_proc_name",
+        "kind": "freefunction",
+        "start_line": 113,
+        "end_line": 121,
+        "start_byte": 3013,
+        "end_byte": 3251
+      },
+      {
+        "id": 9,
+        "qualified_name": "tokenize_title",
+        "kind": "freefunction",
+        "start_line": 124,
+        "end_line": 137,
+        "start_byte": 3296,
+        "end_byte": 3665
+      },
+      {
+        "id": 10,
+        "qualified_name": "get_tab_pane_info",
+        "kind": "freefunction",
+        "start_line": 140,
+        "end_line": 167,
+        "start_byte": 3693,
+        "end_byte": 4349
+      },
+      {
+        "id": 11,
+        "qualified_name": "parse_config",
+        "kind": "freefunction",
+        "start_line": 170,
+        "end_line": 213,
+        "start_byte": 4373,
+        "end_byte": 5998
+      },
+      {
+        "id": 12,
+        "qualified_name": "parse_app_block",
+        "kind": "freefunction",
+        "start_line": 216,
+        "end_line": 325,
+        "start_byte": 6033,
+        "end_byte": 9458
+      },
+      {
+        "id": 13,
+        "qualified_name": "apply_options",
+        "kind": "freefunction",
+        "start_line": 327,
+        "end_line": 383,
+        "start_byte": 9460,
+        "end_byte": 11500
+      },
+      {
+        "id": 14,
+        "qualified_name": "ensure_loaded",
+        "kind": "freefunction",
+        "start_line": 386,
+        "end_line": 517,
+        "start_byte": 11524,
+        "end_byte": 15412
+      },
+      {
+        "id": 15,
+        "qualified_name": "extract_host_from_title",
+        "kind": "freefunction",
+        "start_line": 520,
+        "end_line": 530,
+        "start_byte": 15454,
+        "end_byte": 15831
+      },
+      {
+        "id": 16,
+        "qualified_name": "parse_domain_host",
+        "kind": "freefunction",
+        "start_line": 533,
+        "end_line": 545,
+        "start_byte": 15882,
+        "end_byte": 16362
+      },
+      {
+        "id": 17,
+        "qualified_name": "is_ssh_process",
+        "kind": "freefunction",
+        "start_line": 548,
+        "end_line": 552,
+        "start_byte": 16399,
+        "end_byte": 16613
+      },
+      {
+        "id": 18,
+        "qualified_name": "detect_ssh_host_from_pane",
+        "kind": "freefunction",
+        "start_line": 555,
+        "end_line": 600,
+        "start_byte": 16658,
+        "end_byte": 17929
+      },
+      {
+        "id": 19,
+        "qualified_name": "first_non_option",
+        "kind": "freefunction",
+        "start_line": 576,
+        "end_line": 592,
+        "start_byte": 17405,
+        "end_byte": 17751
+      },
+      {
+        "id": 20,
+        "qualified_name": "match_host_icon",
+        "kind": "freefunction",
+        "start_line": 603,
+        "end_line": 641,
+        "start_byte": 17981,
+        "end_byte": 18935
+      },
+      {
+        "id": 21,
+        "qualified_name": "match_title_patterns",
+        "kind": "freefunction",
+        "start_line": 644,
+        "end_line": 661,
+        "start_byte": 18990,
+        "end_byte": 19475
+      },
+      {
+        "id": 22,
+        "qualified_name": "M.icon_for_title",
+        "kind": "freefunction",
+        "start_line": 664,
+        "end_line": 699,
+        "start_byte": 19499,
+        "end_byte": 20425
+      },
+      {
+        "id": 23,
+        "qualified_name": "M.get_fallback_icon",
+        "kind": "freefunction",
+        "start_line": 702,
+        "end_line": 705,
+        "start_byte": 20448,
+        "end_byte": 20542
+      },
+      {
+        "id": 24,
+        "qualified_name": "M.get_global_icon_color",
+        "kind": "freefunction",
+        "start_line": 708,
+        "end_line": 711,
+        "start_byte": 20624,
+        "end_byte": 20705
+      },
+      {
+        "id": 25,
+        "qualified_name": "M.icon_and_colors_for_tab",
+        "kind": "freefunction",
+        "start_line": 713,
+        "end_line": 843,
+        "start_byte": 20707,
+        "end_byte": 25254
+      },
+      {
+        "id": 26,
+        "qualified_name": "M.setup",
+        "kind": "freefunction",
+        "start_line": 845,
+        "end_line": 867,
+        "start_byte": 25256,
+        "end_byte": 25709
+      }
+    ],
+    "stdlib_calls": [
+      {
+        "src": null,
+        "file": 0,
+        "site_line": 5,
+        "site_byte": 148,
+        "name": "os.getenv",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 0,
+        "file": 0,
+        "site_line": 46,
+        "site_byte": 1313,
+        "name": "os.getenv",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 1,
+        "file": 0,
+        "site_line": 53,
+        "site_byte": 1454,
+        "name": "io.open",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 2,
+        "file": 0,
+        "site_line": 60,
+        "site_byte": 1604,
+        "name": "io.open",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 2,
+        "file": 0,
+        "site_line": 63,
+        "site_byte": 1694,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 5,
+        "file": 0,
+        "site_line": 90,
+        "site_byte": 2290,
+        "name": "os.getenv",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 5,
+        "file": 0,
+        "site_line": 90,
+        "site_byte": 2324,
+        "name": "os.getenv",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 9,
+        "file": 0,
+        "site_line": 132,
+        "site_byte": 3563,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 10,
+        "file": 0,
+        "site_line": 145,
+        "site_byte": 3877,
+        "name": "pcall",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 10,
+        "file": 0,
+        "site_line": 154,
+        "site_byte": 4088,
+        "name": "type",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 10,
+        "file": 0,
+        "site_line": 160,
+        "site_byte": 4230,
+        "name": "ipairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 11,
+        "file": 0,
+        "site_line": 173,
+        "site_byte": 4475,
+        "name": "ipairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 281,
+        "site_byte": 8424,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 342,
+        "site_byte": 10241,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 350,
+        "site_byte": 10413,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 352,
+        "site_byte": 10483,
+        "name": "type",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 354,
+        "site_byte": 10561,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 358,
+        "site_byte": 10693,
+        "name": "type",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 369,
+        "site_byte": 11168,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 370,
+        "site_byte": 11233,
+        "name": "next",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 371,
+        "site_byte": 11258,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 375,
+        "site_byte": 11388,
+        "name": "next",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 408,
+        "site_byte": 12179,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 413,
+        "site_byte": 12296,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 420,
+        "site_byte": 12476,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 426,
+        "site_byte": 12617,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 456,
+        "site_byte": 13656,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 491,
+        "site_byte": 14873,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 492,
+        "site_byte": 14947,
+        "name": "next",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 493,
+        "site_byte": 14977,
+        "name": "table.insert",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 497,
+        "site_byte": 15131,
+        "name": "next",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 19,
+        "file": 0,
+        "site_line": 579,
+        "site_byte": 17497,
+        "name": "tostring",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 20,
+        "file": 0,
+        "site_line": 615,
+        "site_byte": 18298,
+        "name": "ipairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 20,
+        "file": 0,
+        "site_line": 623,
+        "site_byte": 18591,
+        "name": "ipairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 21,
+        "file": 0,
+        "site_line": 647,
+        "site_byte": 19138,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 21,
+        "file": 0,
+        "site_line": 648,
+        "site_byte": 19194,
+        "name": "ipairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 671,
+        "site_byte": 19742,
+        "name": "next",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 674,
+        "site_byte": 19855,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 684,
+        "site_byte": 20075,
+        "name": "next",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 686,
+        "site_byte": 20161,
+        "name": "ipairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 691,
+        "site_byte": 20310,
+        "name": "pairs",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 735,
+        "site_byte": 21377,
+        "name": "type",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 737,
+        "site_byte": 21515,
+        "name": "pcall",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 741,
+        "site_byte": 21655,
+        "name": "pcall",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 822,
+        "site_byte": 24470,
+        "name": "next",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 824,
+        "site_byte": 24555,
+        "name": "ipairs",
+        "reason": "no-candidate-in-scope"
+      }
+    ],
+    "external_calls": [
+      {
+        "src": 0,
+        "file": 0,
+        "site_line": 45,
+        "site_byte": 1276,
+        "name": "path:sub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 0,
+        "file": 0,
+        "site_line": 46,
+        "site_byte": 1341,
+        "name": "path:sub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 1,
+        "file": 0,
+        "site_line": 54,
+        "site_byte": 1481,
+        "name": "f:close",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 2,
+        "file": 0,
+        "site_line": 63,
+        "site_byte": 1681,
+        "name": "f:lines",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 2,
+        "file": 0,
+        "site_line": 64,
+        "site_byte": 1725,
+        "name": "f:close",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 3,
+        "file": 0,
+        "site_line": 71,
+        "site_byte": 1849,
+        "name": "part:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 3,
+        "file": 0,
+        "site_line": 72,
+        "site_byte": 1894,
+        "name": "part:sub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 3,
+        "file": 0,
+        "site_line": 73,
+        "site_byte": 1927,
+        "name": "part:gsub(\"^%s+\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 3,
+        "file": 0,
+        "site_line": 73,
+        "site_byte": 1927,
+        "name": "part:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 3,
+        "file": 0,
+        "site_line": 75,
+        "site_byte": 1999,
+        "name": "part:sub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 3,
+        "file": 0,
+        "site_line": 76,
+        "site_byte": 2027,
+        "name": "part:sub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 3,
+        "file": 0,
+        "site_line": 78,
+        "site_byte": 2098,
+        "name": "part:sub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 4,
+        "file": 0,
+        "site_line": 85,
+        "site_byte": 2190,
+        "name": "s:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 6,
+        "file": 0,
+        "site_line": 97,
+        "site_byte": 2548,
+        "name": "val:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 7,
+        "file": 0,
+        "site_line": 107,
+        "site_byte": 2841,
+        "name": "pat:gsub(\"%%\", \"%%%%\"):gsub(\"%.\", \"%%.\"):gsub(\"%*\", \".*\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 7,
+        "file": 0,
+        "site_line": 107,
+        "site_byte": 2841,
+        "name": "pat:gsub(\"%%\", \"%%%%\"):gsub(\"%.\", \"%%.\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 7,
+        "file": 0,
+        "site_line": 107,
+        "site_byte": 2841,
+        "name": "pat:gsub(\"%%\", \"%%%%\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 7,
+        "file": 0,
+        "site_line": 107,
+        "site_byte": 2841,
+        "name": "pat:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 8,
+        "file": 0,
+        "site_line": 118,
+        "site_byte": 3168,
+        "name": "path:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 9,
+        "file": 0,
+        "site_line": 130,
+        "site_byte": 3496,
+        "name": "title:gmatch",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 11,
+        "file": 0,
+        "site_line": 174,
+        "site_byte": 4511,
+        "name": "raw:gsub(\"^%s+\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 11,
+        "file": 0,
+        "site_line": 174,
+        "site_byte": 4511,
+        "name": "raw:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 11,
+        "file": 0,
+        "site_line": 176,
+        "site_byte": 4579,
+        "name": "stripped:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 11,
+        "file": 0,
+        "site_line": 181,
+        "site_byte": 4702,
+        "name": "raw:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 11,
+        "file": 0,
+        "site_line": 185,
+        "site_byte": 4884,
+        "name": "raw:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 11,
+        "file": 0,
+        "site_line": 186,
+        "site_byte": 4921,
+        "name": "raw:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 224,
+        "site_byte": 6252,
+        "name": "raw:gsub(\"^%s+\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 224,
+        "site_byte": 6252,
+        "name": "raw:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 226,
+        "site_byte": 6319,
+        "name": "stripped:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 232,
+        "site_byte": 6454,
+        "name": "raw:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 238,
+        "site_byte": 6655,
+        "name": "raw:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 239,
+        "site_byte": 6702,
+        "name": "raw:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 244,
+        "site_byte": 6939,
+        "name": "val:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 255,
+        "site_byte": 7257,
+        "name": "lj:gsub(\"^%s+\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 255,
+        "site_byte": 7257,
+        "name": "lj:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 256,
+        "site_byte": 7330,
+        "name": "lj:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 259,
+        "site_byte": 7447,
+        "name": "lj:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 260,
+        "site_byte": 7491,
+        "name": "lj:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 271,
+        "site_byte": 7923,
+        "name": "lk:gsub(\"^%s+\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 271,
+        "site_byte": 7923,
+        "name": "lk:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 272,
+        "site_byte": 8001,
+        "name": "lk:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 275,
+        "site_byte": 8139,
+        "name": "lk:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 12,
+        "file": 0,
+        "site_line": 276,
+        "site_byte": 8190,
+        "name": "lk:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 344,
+        "site_byte": 10327,
+        "name": "k:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 351,
+        "site_byte": 10460,
+        "name": "host_key:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 353,
+        "site_byte": 10522,
+        "name": "host_key_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 13,
+        "file": 0,
+        "site_line": 368,
+        "site_byte": 11128,
+        "name": "host_key_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 436,
+        "site_byte": 12865,
+        "name": "raw:gsub(\"^%s+\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 436,
+        "site_byte": 12865,
+        "name": "raw:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 438,
+        "site_byte": 12936,
+        "name": "stripped:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 444,
+        "site_byte": 13081,
+        "name": "raw:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 448,
+        "site_byte": 13268,
+        "name": "raw:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 449,
+        "site_byte": 13317,
+        "name": "raw:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 452,
+        "site_byte": 13458,
+        "name": "(host_key or \"\"):lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 454,
+        "site_byte": 13573,
+        "name": "val:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 455,
+        "site_byte": 13612,
+        "name": "host_key_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 468,
+        "site_byte": 14018,
+        "name": "lj:gsub(\"^%s+\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 468,
+        "site_byte": 14018,
+        "name": "lj:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 469,
+        "site_byte": 14092,
+        "name": "lj:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 472,
+        "site_byte": 14212,
+        "name": "lj:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 473,
+        "site_byte": 14257,
+        "name": "lj:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 14,
+        "file": 0,
+        "site_line": 490,
+        "site_byte": 14828,
+        "name": "host_key_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 15,
+        "file": 0,
+        "site_line": 522,
+        "site_byte": 15563,
+        "name": "title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 15,
+        "file": 0,
+        "site_line": 524,
+        "site_byte": 15629,
+        "name": "title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 15,
+        "file": 0,
+        "site_line": 526,
+        "site_byte": 15715,
+        "name": "title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 15,
+        "file": 0,
+        "site_line": 526,
+        "site_byte": 15750,
+        "name": "title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 535,
+        "site_byte": 15977,
+        "name": "domain:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 536,
+        "site_byte": 15996,
+        "name": "domain_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 536,
+        "site_byte": 16021,
+        "name": "domain_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 537,
+        "site_byte": 16064,
+        "name": "domain:gsub(\"^[Ss][Ss][Hh][Hh]?:?\", \"\"):gsub(\"^[Mm][Oo][Ss][Hh]:?\", \"\"):gsub(\"^%w+@\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 537,
+        "site_byte": 16064,
+        "name": "domain:gsub(\"^[Ss][Ss][Hh][Hh]?:?\", \"\"):gsub(\"^[Mm][Oo][Ss][Hh]:?\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 537,
+        "site_byte": 16064,
+        "name": "domain:gsub(\"^[Ss][Ss][Hh][Hh]?:?\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 537,
+        "site_byte": 16064,
+        "name": "domain:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 541,
+        "site_byte": 16242,
+        "name": "domain:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 16,
+        "file": 0,
+        "site_line": 541,
+        "site_byte": 16300,
+        "name": "domain:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 563,
+        "site_byte": 16963,
+        "name": "pane:get_foreground_process_info",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 565,
+        "site_byte": 17075,
+        "name": "title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 565,
+        "site_byte": 17110,
+        "name": "title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 572,
+        "site_byte": 17242,
+        "name": "pane:get_foreground_process_info",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 19,
+        "file": 0,
+        "site_line": 581,
+        "site_byte": 17561,
+        "name": "tok:sub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 595,
+        "site_byte": 17815,
+        "name": "host:gsub(\"^%w+@\", \"\"):gsub(\"^%[\", \"\"):gsub(\"%]$\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 595,
+        "site_byte": 17815,
+        "name": "host:gsub(\"^%w+@\", \"\"):gsub(\"^%[\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 595,
+        "site_byte": 17815,
+        "name": "host:gsub(\"^%w+@\", \"\"):gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 18,
+        "file": 0,
+        "site_line": 595,
+        "site_byte": 17815,
+        "name": "host:gsub",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 20,
+        "file": 0,
+        "site_line": 605,
+        "site_byte": 18083,
+        "name": "host:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 20,
+        "file": 0,
+        "site_line": 619,
+        "site_byte": 18459,
+        "name": "key:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 20,
+        "file": 0,
+        "site_line": 626,
+        "site_byte": 18719,
+        "name": "key:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 21,
+        "file": 0,
+        "site_line": 652,
+        "site_byte": 19362,
+        "name": "title:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 668,
+        "site_byte": 19649,
+        "name": "title:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 675,
+        "site_byte": 19887,
+        "name": "title_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 687,
+        "site_byte": 20202,
+        "name": "cand:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 22,
+        "file": 0,
+        "site_line": 692,
+        "site_byte": 20341,
+        "name": "title_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 741,
+        "site_byte": 21679,
+        "name": "pane_info:get_foreground_process_info",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 777,
+        "site_byte": 22908,
+        "name": "pane_info.domain_name:lower",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 779,
+        "site_byte": 23011,
+        "name": "domain_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 779,
+        "site_byte": 23036,
+        "name": "domain_lc:find",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 780,
+        "site_byte": 23083,
+        "name": "pane_info.title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 790,
+        "site_byte": 23405,
+        "name": "pane_info.title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 791,
+        "site_byte": 23447,
+        "name": "pane_info.title:match",
+        "reason": "no-candidate-in-scope"
+      },
+      {
+        "src": 25,
+        "file": 0,
+        "site_line": 825,
+        "site_byte": 24596,
+        "name": "cand:lower",
+        "reason": "no-candidate-in-scope"
+      }
+    ]
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/HEAD",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/config",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/info/exclude",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/index",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/heads/push-spvtklzluktx",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/heads/push-klyxmkuzoltu",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/heads/push-rwkskzmlrkkt",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/heads/main",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/remotes/origin/push-spvtklzluktx",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/remotes/origin/push-klyxmkuzoltu",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/remotes/origin/push-rwkskzmlrkkt",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/remotes/origin/main",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/a694b9c2fb61e79c2726a53895c3f67520236b52",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/60a9f785806e5db1b95b6f3f5d4cbf00e662a8e9",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/426b7aae763720f54de01d824a0a82af0f5c6f67",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/13915ef2cc53bc074d5f97121e85b5337cd23caa",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/3d11459266279f557f1b1939f599efbebf126e44",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/d43c93c8719323c6ab9a7fe87750f235c54c1847",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/70fd536ad47430c3ed9776209c1a949433906f84",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/825d9775d7e216ae355a286781c3e63981e7b691",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/d01d0e2fa9db60f998b20d6b54999b3e3499e708",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/997267d149164d3a3ca79b9bd39963f0481bfbfa",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/2c7aee729f1b2f925fb53cda71a2100595fe5ad5",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/55d0d213316c11b1b22cf1590d1bfd960dad3401",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/9efae54ee88e729fdacb44f129dd61a46ed2c65e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/87bb1b5665a49fcadcaed7d3e43bfb05bee3af28",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/7631d37d906e5f95d858962d4497a7f06bd0feb7",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/baae18dea2e2473916fc435d91655bffdf2d5705",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/0a264ceeb6d3d6d21b62f396506b600b9894dc01",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/5efd78d8bc8d88e6207c2d8982057153f8b41da1",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/2bebf9d0a27c91a497149ec9ab30f859016b21ad",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/09dde8d2c3018194a1e51c40511083dbf09ee01e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/0fe7184ebd2210ece64b1e6e5f9dc93e43f865cd",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/27f45811b804e499850e4a1dc5891739a70e25d9",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/bbd91e09e515b4ca850b9b37e4e0cfb1bf75bd27",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/f33415408379c7765d4c5710e4ce6108ca93a929",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/3e328661673c3a1987b172e648bd656048d3df5f",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/91ba48e0874a37e08726e6754bc2d749172aad4e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/50bbddf086c3ca1df1dc36774536080f8c629f2b",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/777961645f451b55de5374df27a2f472ac998ebc",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/08897940c89e81b659c1985ed838339c0c1792a4",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/f439b0d73e97a2e4d59768cb916f8986989434bd",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/42564452d3a800b570b1ef3afefa7c32e8c1a343",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/fa5f6e72a059b2e92ba14248307abe29db907aeb",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/45445b4dec2906d3bc947aae674a4fc64864b04e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/115059f38fb72b2ffebb597b8c05dbb70e5f71a8",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/24b431a1d2c7c6fb7476004a541be41a87d60930",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/5c377889c8252c2036f516276f4487b8ea1215d8",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/6a3109fc3a83ba23a676957348e433232a78db0e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/33d218084ae8ae34c36bf933152c90e6511169f0",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/f7624308bf38bdc4a28070336f468294255322a5",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/refs/jj/keep/a1a1e58eaf93e0c5beb95b82718dfd7401e08432",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/HEAD",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/heads/push-spvtklzluktx",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/heads/push-klyxmkuzoltu",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/heads/push-rwkskzmlrkkt",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/heads/main",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/remotes/origin/push-spvtklzluktx",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/remotes/origin/push-klyxmkuzoltu",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/remotes/origin/push-rwkskzmlrkkt",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/logs/refs/remotes/origin/main",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/applypatch-msg.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/post-merge",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/pre-merge-commit.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/pre-rebase.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/fsmonitor-watchman.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/pre-commit",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/pre-commit.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/post-update.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/prepare-commit-msg.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/docs.url",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/pre-push.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/commit-msg.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/hooks/pre-applypatch.sample",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/f3/3415408379c7765d4c5710e4ce6108ca93a929",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/ca/97a3e6ec79306148991fded131f8e69edcf492",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/cd/0760c5c05512297c73915da0676eca9d03fb39",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/e4/63e881b673f91d7f35a4a18f8b9acb771950d0",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/f2/427856e2cc2108d903a48af3772b975b6324fe",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/a6/94b9c2fb61e79c2726a53895c3f67520236b52",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/29/705d27f8028698a1a0a6b4a8e552bd48b3ed66",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/29/fcd6b850f05be06150a0addc1ca2dbefbf5d91",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/42/564452d3a800b570b1ef3afefa7c32e8c1a343",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/42/6b7aae763720f54de01d824a0a82af0f5c6f67",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/76/31d37d906e5f95d858962d4497a7f06bd0feb7",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/7e/814c90d5ec5895de8c63a8342450be28d70eec",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/b5/819f4c91f808eae223979b10e1ec61fec890c2",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/24/b431a1d2c7c6fb7476004a541be41a87d60930",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/cb/a059142bd46b500880b716745032771676f091",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/99/7267d149164d3a3ca79b9bd39963f0481bfbfa",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/c7/87975e1ff5b452ae3e29c250bf7fcf77f64789",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/69/814c0953eeb849c093dd1afe121bb9e3bdbc45",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/0e/b0e98c6c2969528ac4edfad374eda99a033032",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/fe/d8d429891f63e758e7ab93678ca11c63f54f38",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/87/bb1b5665a49fcadcaed7d3e43bfb05bee3af28",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/01/a20dd32f99f17d599afafdf932311e785742fc",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/55/d0d213316c11b1b22cf1590d1bfd960dad3401",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/39/19648a7099fa8f7c97891c84588a366f2bd75f",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/60/a9f785806e5db1b95b6f3f5d4cbf00e662a8e9",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/91/ba48e0874a37e08726e6754bc2d749172aad4e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/f5/69f68b17dbb79485cabb87d57ea5a0563b7b3e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/07/30e77216f50a8281e8e9248ffb5c82acd0ae26",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/70/fd536ad47430c3ed9776209c1a949433906f84",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/d0/1d0e2fa9db60f998b20d6b54999b3e3499e708",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/80/7d5983db8974da81873898c775358439450353",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/45/445b4dec2906d3bc947aae674a4fc64864b04e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/3e/2f93e3d03a1341edb07f385754359ac45b2ce0",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/3e/328661673c3a1987b172e648bd656048d3df5f",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/fa/5f6e72a059b2e92ba14248307abe29db907aeb",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/98/b3b8513a6e181a009af7325885d95241a30959",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/37/d5a800c5c8f73477a7041665540ee56902cfdd",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/5c/377889c8252c2036f516276f4487b8ea1215d8",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/3d/11459266279f557f1b1939f599efbebf126e44",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/a1/a1e58eaf93e0c5beb95b82718dfd7401e08432",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/11/0a35fe85df04b94efdfee2f28491d2fbc73ee5",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/11/5059f38fb72b2ffebb597b8c05dbb70e5f71a8",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/de/727d342f8e882bb32e73e5bb58e4b4d1e8d3de",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/bf/833c13814cc68617fad5b7a8e1d6e5dd2c37f7",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/64/824271d61a6108ebb82420f44508065cf6d79a",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/0f/e7184ebd2210ece64b1e6e5f9dc93e43f865cd",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/09/dde8d2c3018194a1e51c40511083dbf09ee01e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/50/f281f032bb69c9e5eff0ef7ecbfdbc34448ad5",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/50/bbddf086c3ca1df1dc36774536080f8c629f2b",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/6b/c7c0722dc4567e6acce0b993f714a5582f3451",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/2c/7aee729f1b2f925fb53cda71a2100595fe5ad5",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/af/69370bcc35ec1e490b2af141ae22a3b766fd70",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/33/d218084ae8ae34c36bf933152c90e6511169f0",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/ee/ae0da51df10d12a47de578f3d943326ddd2152",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/b7/b884e14ab4663e126a410b4d73e74d5450e00e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/5e/fd78d8bc8d88e6207c2d8982057153f8b41da1",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/44/7193611ae50cccd3f42d6f9c37d6b569725c94",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/31/ffd81b2d9c1e802e24cfff32ebb8cedbb96382",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/25/a0c6f06000d8c6cbf1cba5176befc876cdf5f3",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/2b/ebf9d0a27c91a497149ec9ab30f859016b21ad",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/9e/fae54ee88e729fdacb44f129dd61a46ed2c65e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/08/897940c89e81b659c1985ed838339c0c1792a4",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/13/915ef2cc53bc074d5f97121e85b5337cd23caa",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/82/5d9775d7e216ae355a286781c3e63981e7b691",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/b0/f623fb27501cc286b5b45257b3e09d39b57a5e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/eb/8857a808af0e5cb82d21d9134d2aa0f3444af0",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/f7/624308bf38bdc4a28070336f468294255322a5",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/f7/0da83094a86d5b341e393fc6141220f51bba35",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/27/f45811b804e499850e4a1dc5891739a70e25d9",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/77/7961645f451b55de5374df27a2f472ac998ebc",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/bb/d91e09e515b4ca850b9b37e4e0cfb1bf75bd27",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/1d/58e2e1c9708dd4519b7e91d9941c30fa2bffc7",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/85/d1c25c5e5a5c59e358d06a963076e43d7bbecc",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/ba/ae18dea2e2473916fc435d91655bffdf2d5705",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/0a/264ceeb6d3d6d21b62f396506b600b9894dc01",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/68/55b1fabdc3d5ff01a8113adae583fb4ef9dbdc",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/c4/301c70bc74e63e2cfbd6a30c0302f1b6785275",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/f4/39b0d73e97a2e4d59768cb916f8986989434bd",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/0b/731db68da3037f19265c076fe1814ac645bb68",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/6a/3109fc3a83ba23a676957348e433232a78db0e",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/d4/3c93c8719323c6ab9a7fe87750f235c54c1847",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/objects/d2/7a1db571d8f5ac7c319577295fac47e6dcfbb3",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "file_skipped",
+    "path": "./.git/description",
+    "reason": {
+      "kind": "builtin",
+      "detail": ".git"
+    }
+  },
+  {
+    "event": "run_finished",
+    "metrics": {
+      "wall_ms": 13.371193,
+      "phases": {
+        "walk_ms": 9.288298000000001,
+        "parse_ms": 1.932763,
+        "extract_ms": 2.1384000000000003,
+        "resolve_ms": 0.07973,
+        "link_ms": 0.863794,
+        "query_ms": 0.0,
+        "format_ms": 0.0
+      },
+      "files_discovered": 172,
+      "files_analyzed": 1,
+      "files_skipped": 171,
+      "files_errored": 0,
+      "bytes_processed": 25723,
+      "callables": 27,
+      "edges": 57,
+      "unresolved_calls": 0,
+      "stdlib_calls": 46,
+      "external_calls": 100,
+      "ffi_detected": 0,
+      "ffi_resolved": 0,
+      "cache": {
+        "hits": 0,
+        "misses": 0,
+        "bytes_read": 0,
+        "bytes_written": 0
+      },
+      "peak_rss_bytes": 0,
+      "by_language": {
+        "lua": {
+          "files": 1,
+          "callables": 27,
+          "edges": 57,
+          "unresolved": 0,
+          "stdlib": 46,
+          "external": 100
+        },
+        "skip:builtin": {
+          "files": 158,
+          "callables": 0,
+          "edges": 0,
+          "unresolved": 0,
+          "stdlib": 0,
+          "external": 0
+        }
+      },
+      "cycles": [],
+      "longest_path_len": 0,
+      "confidence_histogram": {
+        "high": 57,
+        "medium": 0,
+        "low": 0
+      }
+    }
+  }
+]

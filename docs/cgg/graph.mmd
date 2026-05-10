@@ -1,0 +1,66 @@
+flowchart LR
+  C0["expanduser"]
+  C1["file_exists"]
+  C2["read_lines"]
+  C3["sanitize_yaml_value"]
+  C4["count_indent"]
+  C5["resolve_icon_config_path"]
+  C6["parse_bool"]
+  C7["pattern_to_lua"]
+  C8["extract_proc_name"]
+  C9["tokenize_title"]
+  C10["get_tab_pane_info"]
+  C11["parse_config"]
+  C12["parse_app_block"]
+  C13["apply_options"]
+  C14["ensure_loaded"]
+  C15["extract_host_from_title"]
+  C16["parse_domain_host"]
+  C17["is_ssh_process"]
+  C18["detect_ssh_host_from_pane"]
+  C19["first_non_option"]
+  C20["match_host_icon"]
+  C21["match_title_patterns"]
+  C22["M.icon_for_title"]
+  C23["M.get_fallback_icon"]
+  C24["M.get_global_icon_color"]
+  C25["M.icon_and_colors_for_tab"]
+  C26["M.setup"]
+  C1 --> C0
+  C2 --> C0
+  C5 --> C1
+  C5 --> C0
+  C11 --> C4
+  C11 -->|2x| C3
+  C11 -->|2x| C6
+  C12 -->|3x| C4
+  C12 -->|6x| C3
+  C14 --> C5
+  C14 --> C2
+  C14 --> C11
+  C14 -->|3x| C12
+  C14 -->|2x| C4
+  C14 -->|4x| C3
+  C17 --> C8
+  C18 --> C15
+  C18 -->|2x| C17
+  C18 --> C19
+  C20 -->|2x| C7
+  C21 --> C7
+  C22 --> C14
+  C22 --> C21
+  C22 --> C9
+  C23 --> C14
+  C24 --> C14
+  C25 --> C14
+  C25 --> C10
+  C25 -->|2x| C8
+  C25 --> C18
+  C25 --> C15
+  C25 -->|2x| C17
+  C25 --> C16
+  C25 --> C20
+  C25 --> C22
+  C25 --> C9
+  C26 --> C13
+  C26 --> C14
