@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "nerd_icons_fucked",
+  "project_id": "9d4509fa-3057-4312-8761-df77a39ee86f"
+}
